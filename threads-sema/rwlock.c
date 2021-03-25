@@ -12,6 +12,7 @@
 #include "zemaphore.h"
 #endif
 
+int x = 0, y = 0 ;
 typedef struct _rwlock_t {
     sem_t writelock;
     sem_t lock;
@@ -59,7 +60,10 @@ void *reader(void *arg) {
     int local = 0;
     for (i = 0; i < read_loops; i++) {
 	rwlock_acquire_readlock(&mutex);
+    //Reading
 	local = counter;
+        x++;
+        printf("Reader: %d \t", x);
 	rwlock_release_readlock(&mutex);
 	printf("read %d\n", local);
     }
@@ -71,6 +75,9 @@ void *writer(void *arg) {
     int i;
     for (i = 0; i < write_loops; i++) {
 	rwlock_acquire_writelock(&mutex);
+    //Writing
+        y++;
+        printf("Writer: %d \t", y);
 	counter++;
 	rwlock_release_writelock(&mutex);
     }
